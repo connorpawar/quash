@@ -106,11 +106,10 @@ void run_echo(EchoCommand cmd) {
 
   // TODO: Implement echo
   //IMPLEMENT_ME();
-  for( int i = 0; NULL != str[i]; i++ )
-{
-  printf("%s ", str[i]);
-}
-
+  for(int i = 0 ; NULL != str[i]; i++){
+      printf("%s ", str[i]);
+  }
+  printf("\n");
   // Flush the buffer before returning
   fflush(stdout);
 }
