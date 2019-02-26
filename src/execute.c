@@ -28,12 +28,14 @@
 char* get_current_directory(bool* should_free) {
   // TODO: Get the current working directory. This will fix the prompt path.
   // HINT: This should be pretty simple
-  IMPLEMENT_ME();
+
+
+
+  //MPLEMENT_ME();
 
   // Change this to true if necessary
-  *should_free = false;
-
-  return "get_current_directory()";
+  *should_free = true;
+  return(getcwd(NULL, 512));
 }
 
 // Returns the value of an environment variable env_var
@@ -109,10 +111,14 @@ void run_echo(EchoCommand cmd) {
   char** str = cmd.args;
 
   // TODO: Remove warning silencers
-  (void) str; // Silence unused variable warning
+ // (void) str; // Silence unused variable warning
 
   // TODO: Implement echo
-  IMPLEMENT_ME();
+  //IMPLEMENT_ME();
+  for( int i = 0; NULL != str[i]; i++ )
+{
+  printf("%s ", str[i]);
+}
 
   // Flush the buffer before returning
   fflush(stdout);
