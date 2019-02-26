@@ -44,12 +44,8 @@ const char* lookup_env(const char* env_var) {
   // to interpret variables from the command line and display the prompt
   // correctly
   // HINT: This should be pretty simple
-  //IMPLEMENT_ME();
 
-  // TODO: Remove warning silencers
-  //(void) env_var; // Silence unused variable warning
-
-  return getenv(env_var);
+  return(getenv(env_var));
 }
 
 // Check the status of background jobs
@@ -94,12 +90,7 @@ void run_generic(GenericCommand cmd) {
   char* exec = cmd.args[0];
   char** args = cmd.args;
 
-  // TODO: Remove warning silencers
-  (void) exec; // Silence unused variable warning
-  (void) args; // Silence unused variable warning
-
-  // TODO: Implement run generic
-  IMPLEMENT_ME();
+  execvp(exec, args);
 
   perror("ERROR: Failed to execute program");
 }
