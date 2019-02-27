@@ -26,25 +26,12 @@
 
 // Return a string containing the current working directory.
 char* get_current_directory(bool* should_free) {
-  // TODO: Get the current working directory. This will fix the prompt path.
-  // HINT: This should be pretty simple
-
-
-
-  //MPLEMENT_ME();
-
-  // Change this to true if necessary
   *should_free = true;
   return(getcwd(NULL, 512));
 }
 
 // Returns the value of an environment variable env_var
 const char* lookup_env(const char* env_var) {
-  // TODO: Lookup environment variables. This is required for parser to be able
-  // to interpret variables from the command line and display the prompt
-  // correctly
-  // HINT: This should be pretty simple
-
   return(getenv(env_var));
 }
 
@@ -54,6 +41,8 @@ void check_jobs_bg_status() {
   // jobs. This function should remove jobs from the jobs queue once all
   // processes belonging to a job have completed.
   IMPLEMENT_ME();
+
+
 
   // TODO: Once jobs are implemented, uncomment and fill the following line
   // print_job_bg_complete(job_id, pid, cmd);
@@ -101,11 +90,6 @@ void run_echo(EchoCommand cmd) {
   // string is always NULL) list of strings.
   char** str = cmd.args;
 
-  // TODO: Remove warning silencers
- // (void) str; // Silence unused variable warning
-
-  // TODO: Implement echo
-  //IMPLEMENT_ME();
   for(int i = 0 ; NULL != str[i]; i++){
       printf("%s ", str[i]);
   }
@@ -127,6 +111,9 @@ void run_export(ExportCommand cmd) {
 void run_cd(CDCommand cmd) {
   // Get the directory name
   const char* dir = cmd.dir;
+  char* oldDir;
+  char* newDir;
+
 
   // Check if the directory is valid
   if (dir == NULL) {
@@ -136,10 +123,22 @@ void run_cd(CDCommand cmd) {
 
   // TODO: Change directory
 
+  oldDir = getcwd(NULL, 512);
+
+  chdir(dir);
+
+  newDir = getcwd(NULL, 512);
+
   // TODO: Update the PWD environment variable to be the new current working
   // directory and optionally update OLD_PWD environment variable to be the old
   // working directory.
-  IMPLEMENT_ME();
+
+  setenv("PWD", newDir, 1);
+  setenv("OLDPWD", oldDir, 1);
+
+  //free directory strings
+  free(newDir);
+  free(oldDir);
 }
 
 // Sends a signal to all processes contained in a job
