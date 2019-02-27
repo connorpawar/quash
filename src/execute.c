@@ -157,9 +157,13 @@ void run_kill(KillCommand cmd) {
 
 // Prints the current working directory to stdout
 void run_pwd() {
-  // TODO: Print the current working directory
-  IMPLEMENT_ME();
+  bool should_free;
+  char* currDirectorySTR = get_current_directory(&should_free);
+  printf("%s\n", currDirectorySTR);
 
+  if(should_free){
+      free(currDirectorySTR);
+  }
   // Flush the buffer before returning
   fflush(stdout);
 }
