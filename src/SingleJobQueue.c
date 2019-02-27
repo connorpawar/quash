@@ -1,3 +1,3 @@
 #include "SingleJobQueue.h"
 
-IMPLEMENT_DEQUE (job_process_queue_t, pid_t);
+IMPLEMENT_DEQUE (jobProcessQueue_t, pid_t);

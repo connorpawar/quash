@@ -12,6 +12,9 @@
 #include <stdio.h>
 
 #include "quash.h"
+#include "Job.h"
+#include "SingleJobQueue.h"
+#include "BackgroundJobQueue.h"
 
 // Remove this and all expansion calls to it
 /**
@@ -23,6 +26,8 @@
 /***************************************************************************
  * Interface Functions
  ***************************************************************************/
+
+job_id_t job_id = 1;
 
 // Return a string containing the current working directory.
 char* get_current_directory(bool* should_free) {
@@ -40,9 +45,61 @@ void check_jobs_bg_status() {
   // TODO: Check on the statuses of all processes belonging to all background
   // jobs. This function should remove jobs from the jobs queue once all
   // processes belonging to a job have completed.
-  IMPLEMENT_ME();
+  //IMPLEMENT_ME();
 
+  if(is_empty_backgroundJobQueue_t(&backgroundQueue)){
+      return;
+  }
 
+  int jobQueueLength = length_backgroundJobQueue_t(&backgroundQueue);
+
+  for(int i = 0; i < jobQueueLength; i++){
+      Job job;
+      jobProcessQueue_t queue;
+      int processQueue_length;
+      bool job_still_has_running_process;;
+
+      job = pop_front_backgroundJobQueue_t(&backgroundQueue);
+      queue = job.processQueue;
+      processQueue_length = length_jobProcessQueue_t(&queue);
+      job_still_has_running_process = false;
+
+      for( int j = 0; j < processQueue_length; j++ ){
+          pid_t returnPid;
+          int status;
+          int pid;
+
+          pid = pop_front_jobProcessQueue_t(&queue);
+          returnPid = waitpid(pid, &status, WNOHANG);
+        if (returnPid == -1){
+            // error
+        }
+        else if (returnPid == 0){
+            // child is still running
+            job_still_has_running_process = true;
+        }
+        else if (returnPid == pid){
+            // child is finished.
+        }
+        push_back_jobProcessQueue_t(&queue,pid);
+      }
+
+      if( job_still_has_running_process )
+      {
+        // re-add it to the queue
+        push_back_backgroundJobQueue_t(&backgroundQueue, job);
+      }
+      else
+      {
+        // don't add it back, print message
+        print_job_bg_complete(
+                                job.job_id,
+                                peek_front_jobProcessQueue_t(&job.processQueue),
+                                job.cmd
+                             );
+        destroy_job(&job);
+      }
+} //end for job_queue_length
 
   // TODO: Once jobs are implemented, uncomment and fill the following line
   // print_job_bg_complete(job_id, pid, cmd);
@@ -172,7 +229,7 @@ void run_pwd() {
 void run_jobs() {
   // TODO: Print background jobs
   IMPLEMENT_ME();
-  
+
 
   // Flush the buffer before returning
   fflush(stdout);
@@ -303,6 +360,17 @@ void create_process(CommandHolder holder) {
                                   // a fork
   //child_run_command(holder.cmd); // This should be done in the child branch of a fork
 }
+
+void initBackgroundJobQueue(void)
+{
+  backgroundQueue = new_destructable_backgroundJobQueue_t(1,destroy_job_callback);
+}
+
+void destroyBackgroundJobQueue(void)
+{
+  destroy_backgroundJobQueue_t(&backgroundQueue);
+}
+
 
 // Run a list of commands
 void run_script(CommandHolder* holders) {

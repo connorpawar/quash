@@ -3,14 +3,13 @@
 
 #include "SingleJobQueue.h"
 
-#define MAX_PIPES 10
 typedef int job_id_t;
 
 typedef struct Job
 {
-  job_process_queue_t process_queue; //carry pids of all processes with it
-  int pipes[MAX_PIPES][2];
-  bool is_background;
+  jobProcessQueue_t processQueue; //carry pids of all processes with it
+  int pipes[10][2];
+  bool isBackground;
   job_id_t job_id;
   char* cmd;
 } Job;

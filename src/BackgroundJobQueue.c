@@ -1,4 +1,3 @@
 #include "BackgroundJobQueue.h"
 
-IMPLEMENT_DEQUE( background_job_queue_t, Job);
-
+IMPLEMENT_DEQUE( backgroundJobQueue_t, Job);

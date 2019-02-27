@@ -5,13 +5,13 @@
 
 
 /*
- * Declare the queue data structure
+ * Declare the queue
  */
-IMPLEMENT_DEQUE_STRUCT (job_process_queue_t, pid_t);
+IMPLEMENT_DEQUE_STRUCT (jobProcessQueue_t, pid_t);
 
 /*
- * Declare a queue for storing process ids (i.e. integers)
+ * Create a queue for storing pids
  */
-PROTOTYPE_DEQUE (job_process_queue_t, pid_t);
+PROTOTYPE_DEQUE (jobProcessQueue_t, pid_t);
 
 #endif

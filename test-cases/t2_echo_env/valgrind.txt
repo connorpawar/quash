@@ -1,0 +1,14 @@
+==6278== Memcheck, a memory error detector
+==6278== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==6278== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==6278== Command: /home/connor/Documents/EECS_678/quash/quash
+==6278== 
+==6278== 
+==6278== HEAP SUMMARY:
+==6278==     in use at exit: 0 bytes in 0 blocks
+==6278==   total heap usage: 11 allocs, 11 frees, 23,322 bytes allocated
+==6278== 
+==6278== All heap blocks were freed -- no leaks are possible
+==6278== 
+==6278== For counts of detected and suppressed errors, rerun with: -v
+==6278== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
