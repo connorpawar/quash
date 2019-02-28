@@ -64,7 +64,7 @@ void check_jobs_bg_status() {
       processQueue_length = length_jobProcessQueue_t(&queue);
       job_still_has_running_process = false;
 
-      for( int j = 0; j < processQueue_length; j++ ){
+      for(int j = 0; j < processQueue_length; j++){
           pid_t returnPid;
           int status;
           int pid;
@@ -99,10 +99,7 @@ void check_jobs_bg_status() {
                              );
         destroy_job(&job);
       }
-} //end for job_queue_length
-
-  // TODO: Once jobs are implemented, uncomment and fill the following line
-  // print_job_bg_complete(job_id, pid, cmd);
+  } //end for job_queue_length
 }
 
 // Prints the job id number, the process id of the first process belonging to
@@ -227,8 +224,16 @@ void run_pwd() {
 
 // Prints all background jobs currently in the job list to stdout
 void run_jobs() {
-  // TODO: Print background jobs
-  IMPLEMENT_ME();
+  //If queue is empty then task already complete
+  if(is_empty_backgroundJobQueue_t(&backgroundQueue)){
+      return;
+  }
+
+  for(int i = 0; i < jobQueueLength; i++){
+      Job job = pop_front_backgroundJobQueue_t(&backgroundQueue);
+      print_job(job.job_id, peek_front_jobProcessQueue_t(&job.processQueue), job.cmd);
+      push_back_backgroundJobQueue_t(&backgroundQueue, job);
+  }
 
 
   // Flush the buffer before returning
