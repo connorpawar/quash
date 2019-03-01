@@ -1,23 +1,14 @@
-==6529== Memcheck, a memory error detector
-==6529== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==6529== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
-==6529== Command: /home/connor/Documents/EECS_678/quash/quash
-==6529== 
-IMPLEMENT ME: src/execute.c(line 357): create_process()
-IMPLEMENT ME: src/execute.c(line 397): run_script()
-IMPLEMENT ME: src/execute.c(line 357): create_process()
-IMPLEMENT ME: src/execute.c(line 357): create_process()
-IMPLEMENT ME: src/execute.c(line 357): create_process()
-IMPLEMENT ME: src/execute.c(line 357): create_process()
-IMPLEMENT ME: src/execute.c(line 397): run_script()
-IMPLEMENT ME: src/execute.c(line 357): create_process()
-IMPLEMENT ME: src/execute.c(line 397): run_script()
-==6529== 
-==6529== HEAP SUMMARY:
-==6529==     in use at exit: 0 bytes in 0 blocks
-==6529==   total heap usage: 27 allocs, 27 frees, 33,578 bytes allocated
-==6529== 
-==6529== All heap blocks were freed -- no leaks are possible
-==6529== 
-==6529== For counts of detected and suppressed errors, rerun with: -v
-==6529== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==14567== Memcheck, a memory error detector
+==14567== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==14567== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==14567== Command: /home/connor/Documents/EECS_678/quash/quash
+==14567== 
+==14567== 
+==14567== HEAP SUMMARY:
+==14567==     in use at exit: 0 bytes in 0 blocks
+==14567==   total heap usage: 35 allocs, 35 frees, 33,662 bytes allocated
+==14567== 
+==14567== All heap blocks were freed -- no leaks are possible
+==14567== 
+==14567== For counts of detected and suppressed errors, rerun with: -v
+==14567== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
