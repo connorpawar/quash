@@ -1,23 +1,23 @@
-==22891== Memcheck, a memory error detector
-==22891== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==22891== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
-==22891== Command: /home/connor/Documents/EECS_678/quash/quash
-==22891== 
-==23306== 
-==23306== HEAP SUMMARY:
-==23306==     in use at exit: 0 bytes in 0 blocks
-==23306==   total heap usage: 12 allocs, 12 frees, 27,406 bytes allocated
-==23306== 
-==23306== All heap blocks were freed -- no leaks are possible
-==23306== 
-==23306== For counts of detected and suppressed errors, rerun with: -v
-==23306== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
-==22891== 
-==22891== HEAP SUMMARY:
-==22891==     in use at exit: 0 bytes in 0 blocks
-==22891==   total heap usage: 12 allocs, 12 frees, 23,318 bytes allocated
-==22891== 
-==22891== All heap blocks were freed -- no leaks are possible
-==22891== 
-==22891== For counts of detected and suppressed errors, rerun with: -v
-==22891== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==1954== Memcheck, a memory error detector
+==1954== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==1954== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==1954== Command: /home/connor/Documents/EECS_678/quash/quash
+==1954== 
+==2357== 
+==2357== HEAP SUMMARY:
+==2357==     in use at exit: 0 bytes in 0 blocks
+==2357==   total heap usage: 12 allocs, 12 frees, 27,406 bytes allocated
+==2357== 
+==2357== All heap blocks were freed -- no leaks are possible
+==2357== 
+==2357== For counts of detected and suppressed errors, rerun with: -v
+==2357== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==1954== 
+==1954== HEAP SUMMARY:
+==1954==     in use at exit: 0 bytes in 0 blocks
+==1954==   total heap usage: 12 allocs, 12 frees, 23,318 bytes allocated
+==1954== 
+==1954== All heap blocks were freed -- no leaks are possible
+==1954== 
+==1954== For counts of detected and suppressed errors, rerun with: -v
+==1954== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

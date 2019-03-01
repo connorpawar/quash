@@ -43,11 +43,6 @@ const char* lookup_env(const char* env_var) {
 
 // Check the status of background jobs
 void check_jobs_bg_status() {
-  // TODO: Check on the statuses of all processes belonging to all background
-  // jobs. This function should remove jobs from the jobs queue once all
-  // processes belonging to a job have completed.
-  //IMPLEMENT_ME();
-
   if(is_empty_backgroundJobQueue_t(&backgroundQueue)){
       return;
   }
@@ -93,11 +88,7 @@ void check_jobs_bg_status() {
       else
       {
         // don't add it back, print message
-        print_job_bg_complete(
-                                job.job_id,
-                                peek_front_jobProcessQueue_t(&job.processQueue),
-                                job.cmd
-                             );
+        print_job_bg_complete(job.job_id, peek_front_jobProcessQueue_t(&job.processQueue), job.cmd);
         destroy_job(&job);
       }
   } //end for job_queue_length
@@ -176,18 +167,9 @@ void run_cd(CDCommand cmd) {
     return;
   }
 
-  // TODO: Change directory
-
   oldDir = getcwd(NULL, 512);
-
   chdir(dir);
-
   newDir = getcwd(NULL, 512);
-
-  // TODO: Update the PWD environment variable to be the new current working
-  // directory and optionally update OLD_PWD environment variable to be the old
-  // working directory.
-
   setenv("PWD", newDir, 1);
   setenv("OLDPWD", oldDir, 1);
 
@@ -365,16 +347,6 @@ void create_process(CommandHolder holder, int pipeNum, Job* job) {
   bool r_out = holder.flags & REDIRECT_OUT;
   bool r_app = holder.flags & REDIRECT_APPEND; // This can only be true if r_out
                                                // is true
-
-  // TODO: Remove warning silencers
-  (void) p_in;  // Silence unused variable warning
-  (void) p_out; // Silence unused variable warning
-  (void) r_in;  // Silence unused variable warning
-  (void) r_out; // Silence unused variable warning
-  (void) r_app; // Silence unused variable warning
-
-  // TODO: Setup pipes, redirects, and new process
-  //IMPLEMENT_ME();
 
   pid_t pid = fork();
  //change so that parent is first
