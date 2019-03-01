@@ -1,4 +1,4 @@
-STUDENTID = XXXXXXX
+STUDENTID = 2876234
 PROGNAME = quash
 
 CC = gcc --std=gnu11

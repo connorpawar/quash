@@ -459,10 +459,9 @@ void run_script(CommandHolder* holders) {
   if (!(holders[0].flags & BACKGROUND)) {
     // Not a background Job
     // TODO: Wait for all processes under the job to complete
-    //IMPLEMENT_ME();
     while(!is_empty_jobProcessQueue_t(&job.processQueue)){
-        int status;
-        if(waitpid(peek_back_jobProcessQueue_t(&job.processQueue), &status, 0) != -1){
+        int jobStatus;
+        if(waitpid(peek_back_jobProcessQueue_t(&job.processQueue), &jobStatus, 0) != -1){
             pop_back_jobProcessQueue_t(&job.processQueue);
         }
     }
@@ -471,13 +470,10 @@ void run_script(CommandHolder* holders) {
   else {
     // A background job.
     // TODO: Push the new job to the job queue
-    //IMPLEMENT_ME();
     job.isBackground = true;
     job.cmd = get_command_string();
-    job.job_id = job_id + 1;
+    job.job_id = job_id++;
     push_back_backgroundJobQueue_t(&backgroundQueue, job);
-
-    // TODO: Once jobs are implemented, uncomment and fill the following line
     print_job_bg_start(job.job_id, peek_front_jobProcessQueue_t(&job.processQueue), job.cmd);
   }
 }
