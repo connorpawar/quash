@@ -39,44 +39,57 @@ typedef struct _job_t
 job_t** jobs = NULL;
 
 void updateTime(int time){
-	currentTime = time;
-	job_t * job = NULL;
+	currentTime = time;//update current time
 	for(int i = 0; i<numCores; i++){
-		job = jobs[i];
-		if(job != NULL){
-			if(job->m_firstTime==-1 && job->m_lastTime != currentTime){
-				job->m_firstTime = job->m_lastTime;
-				response = job->m_firstTime - job->m_arrTime +response;
+		if(jobs[i] != NULL){
+			if(jobs[i]->m_firstTime==-1 && jobs[i]->m_lastTime != currentTime){
+				jobs[i]->m_firstTime = jobs[i]->m_lastTime;
+				response = jobs[i]->m_firstTime - jobs[i]->m_arrTime +response;
 				numResponse ++;
 			}
-			job->m_remTime = job->m_remTime - (currentTime - job->m_lastTime);
-			job->m_lastTime = currentTime;
+			jobs[i]->m_remTime = jobs[i]->m_remTime - (currentTime - jobs[i]->m_lastTime);
+			jobs[i]->m_lastTime = currentTime;
 		}
-	}
+	}//loops through each of the jobs on each of the cores to update their times
 }
 
 
 int comparer(const void * job1, const void * job2){
 	int result = 0;
-	int timeDiff = (int)(((job_t*)job1)->m_arrTime - ((job_t*)job2)->m_arrTime);
+	int timeDiff = (int)(((job_t*)job1)->m_arrTime - ((job_t*)job2)->m_arrTime);//calculate difference between job times
 	if(appliedSchema == FCFS){
 		return timeDiff;
-	}
+	}//if first come first serve just return time difference
 	if(appliedSchema == SJF){
-		result = (int)(((job_t*)job1)->m_runTime - ((job_t*)job2)->m_runTime);
-		return(result==0) ? timeDiff : result;
-	}
+		result = (int)(((job_t*)job1)->m_runTime - ((job_t*)job2)->m_runTime);//run time difference
+		if(result == 0){
+			return(timeDiff);//if there is no difference just return the time difference
+		}
+		else{
+			return(result);
+		}
+	}//if shortest job first return differnce in runtime
 	if(appliedSchema == PSJF){
-		result = (int)(((job_t*)job1)->m_remTime - ((job_t*)job2)->m_remTime);
-		return(result==0) ? timeDiff : result;
-	}
+		result = (int)(((job_t*)job1)->m_remTime - ((job_t*)job2)->m_remTime);//difference in remaining time
+		if(result == 0){
+			return(timeDiff);
+		}
+		else{
+			return(result);
+		}
+	}//if priority shortest job first return remaining time
 	if(appliedSchema == PRI || appliedSchema == PPRI){
-		result = (int)(((job_t*)job1)->m_priority - ((job_t*)job2)->m_priority);
-		return(result==0) ? timeDiff : result;
-	}
+		result = (int)(((job_t*)job1)->m_priority - ((job_t*)job2)->m_priority);//compare the priority
+		if(result == 0){
+			return(timeDiff);
+		}
+		else{
+			return(result);
+		}
+	}//return difference of priority
 	if(appliedSchema == RR){
 		return(0);
-	}
+	}//Round robin doesn't need to compare
 	return(0);
 }
 
@@ -85,24 +98,17 @@ job_t* jobRemove(int id, int jobNum){
 	rem->m_lastTime=-1;
 
 	jobs[id] = NULL;
-	priqueue_offer(jobQueue,rem);
-	return(rem);
+	priqueue_offer(jobQueue,rem);//remove job from queue
+	return(rem);//return job that was removed
 }
 
 int coreAvail(){
 	for(int i = 0; i<numCores; i++){
 		if(jobs[i] == NULL){
 			return(i);
-		}
+		}//returns the index of the first core available or -1 if there isn't one
 	}
 	return(-1);
-}
-
-job_t* coreAssign(int index, job_t* ajob){
-	jobs[index] = ajob;
-
-	ajob->m_lastTime=currentTime;
-	return(ajob);
 }
 
 int preempt(job_t* ajob){
@@ -110,20 +116,23 @@ int preempt(job_t* ajob){
 	int new_result = 0;
 	int index = -1;
 	for(int i = 0; i<numCores; i++){
-		new_result = comparer(ajob, jobs[i]);
+		new_result = comparer(ajob, jobs[i]);//compare inputted job with job of each of the cores
 		if(result>new_result){
 			result = new_result;
 			index = i;
 		}
 		else if(new_result == result){
 			if(index!=-1){
-				index = (jobs[index]->m_arrTime >= jobs[i]->m_arrTime) ? index : i;
+				if(jobs[index]->m_arrTime < jobs[i]->m_arrTime){
+					index = i;
+				}
 			}
 		}
 	}
 	if(index>=0){
 		jobRemove(index, jobs[index]->m_jobNum);
-		coreAssign(index, ajob);
+		jobs[index]=ajob;
+		ajob->m_lastTime = currentTime;
 	}
 	return(index);
 }
@@ -142,15 +151,15 @@ int preempt(job_t* ajob){
 */
 void scheduler_start_up(int cores, scheme_t scheme)
 {
-	appliedSchema = scheme;
-	jobQueue = (priqueue_t*)malloc(sizeof(priqueue_t));
-	priqueue_init(jobQueue,&comparer);
-	numCores=cores;
-	jobs = (job_t**)malloc(sizeof(job_t*)*numCores);
+	appliedSchema = scheme;//set global scheme var
+	jobQueue = (priqueue_t*)malloc(sizeof(priqueue_t));//alloc space for queue
+	priqueue_init(jobQueue,&comparer);//create priority queue
+	numCores=cores;//set num Cores
+	jobs = (job_t**)malloc(sizeof(job_t*)*numCores);//alloc space for jobs
 	for(int i =0; i<numCores; i++){
 		jobs[i]=NULL;
-	}
-	updateTime(0);
+	}//Initialize all the jobs to null
+	updateTime(0);//set time to 0 to start
 }
 
 
@@ -176,19 +185,19 @@ void scheduler_start_up(int cores, scheme_t scheme)
  */
 int scheduler_new_job(int job_number, int time, int running_time, int priority)
 {
-	updateTime(time);
-	int index;
-	job_t* newJob = (job_t*)malloc(sizeof(job_t));
+	updateTime(time);//update time to the one called with the new job
+	job_t* newJob = (job_t*)malloc(sizeof(job_t));//alloc the space for the added job
 	newJob->m_jobNum = job_number;
 	newJob->m_arrTime = time;
 	newJob->m_runTime = running_time;
 	newJob->m_remTime = running_time;
 	newJob->m_priority = priority;
 	newJob->m_firstTime = -1;
-	newJob->m_lastTime = -1;
-	index = coreAvail();
+	newJob->m_lastTime = -1;//initialize all the job variables
+	int index = coreAvail();
 	if(index!=-1){
-		coreAssign(index, newJob);
+		jobs[index]=newJob;
+		newJob->m_lastTime = currentTime;
 		return index;
 	}
 	else if(appliedSchema == PSJF || appliedSchema == PPRI){
@@ -221,20 +230,21 @@ int scheduler_new_job(int job_number, int time, int running_time, int priority)
  */
 int scheduler_job_finished(int core_id, int job_number, int time)
 {
-	updateTime(time);
-	job_t * jobFin = jobRemove(core_id,job_number);
-	priqueue_remove(jobQueue,jobFin);
+	updateTime(time);//update time
+	job_t * jobFin = jobRemove(core_id,job_number);//remove finished job
+	priqueue_remove(jobQueue,jobFin);//remove from queue
 
-	wait = currentTime - jobFin->m_arrTime-jobFin->m_runTime + wait;
+	wait = currentTime - jobFin->m_arrTime-jobFin->m_runTime + wait;//set wait time
 	numWait++;
-	turnAround = currentTime - jobFin->m_arrTime + turnAround;
+	turnAround = currentTime - jobFin->m_arrTime + turnAround;//set turn around time
 	numTurnAround ++;
 
-	free(jobFin);
+	free(jobFin);//free the job
 
 	jobFin = priqueue_poll(jobQueue);
 	if(jobFin){
-		coreAssign(core_id,jobFin);
+		jobs[core_id]=jobFin;
+		jobFin->m_lastTime = currentTime;
 		return(jobFin->m_jobNum);
 	}
 	return -1;
@@ -257,11 +267,12 @@ int scheduler_job_finished(int core_id, int job_number, int time)
 int scheduler_quantum_expired(int core_id, int time)
 {
 	updateTime(time);
-	jobRemove(core_id, jobs[core_id]->m_jobNum);
+	jobRemove(core_id, jobs[core_id]->m_jobNum);//remove job
 
-	job_t * jobExp = priqueue_poll(jobQueue);
+	job_t * jobExp = priqueue_poll(jobQueue);//poll job
 	if(jobExp){
-		coreAssign(core_id, jobExp);
+		jobs[core_id]=jobExp;
+		jobExp->m_lastTime = currentTime;
 		return(jobExp->m_jobNum);
 	}
 	return -1;
@@ -277,7 +288,12 @@ int scheduler_quantum_expired(int core_id, int time)
  */
 float scheduler_average_waiting_time()
 {
-	return (numWait == 0) ? 0.0 : (float)wait/numWait;
+	if(numWait == 0){
+		return(0.0);
+	}
+	else{
+		return((float)wait/numWait);
+	}
 }
 
 
@@ -290,7 +306,12 @@ float scheduler_average_waiting_time()
  */
 float scheduler_average_turnaround_time()
 {
-	return (numTurnAround==0) ? 0.0 : (float)turnAround/numTurnAround;
+	if(numWait == 0){
+		return(0.0);
+	}
+	else{
+		return((float)turnAround/numTurnAround);
+	}
 }
 
 
@@ -303,7 +324,12 @@ float scheduler_average_turnaround_time()
  */
 float scheduler_average_response_time()
 {
-	return (numResponse == 0) ? 0.0 : (float)response/numResponse;
+	if(numWait == 0){
+		return(0.0);
+	}
+	else{
+		return((float)response/numResponse);
+	}
 }
 
 
@@ -318,7 +344,7 @@ void scheduler_clean_up()
 	void * temp;
 	while( (temp = priqueue_poll(jobQueue)) != NULL){
 		free(temp);
-	}
+	}//frees all of the jobs in the queue
 	free(jobs);
 	priqueue_destroy(jobQueue);
 	free(jobQueue);

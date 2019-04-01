@@ -3,19 +3,11 @@
 
 #ifndef LIBPRIQUEUE_H_
 #define LIBPRIQUEUE_H_
-#define error(e) printf("Error in %s at %d: %s\n",__FUNCTION__,__LINE__,e)
-
-#define DEBUG
-#ifdef DEBUG
-	#define D(x) x
-#else
-	#define D(x)
-#endif
 
 typedef struct node{
 	void * m_obj;
 	struct node * m_next;
-}node_t;
+}node_t;//node for the queue to hold on to
 
 void* deleteNode(node_t* del);
 
